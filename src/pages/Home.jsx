@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@mui/material";
+import Plan from "./Plan";
 
 export default function Home() {
   const messages = [
@@ -11,6 +12,11 @@ export default function Home() {
 
   const [index, setIndex] = useState(0);
   const [showButton, setShowButton] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
+
+  function handleStartButton() {
+    setIsClicked(true);
+  }
 
   useEffect(() => {
     if (index >= messages.length - 1) return;
@@ -32,7 +38,7 @@ export default function Home() {
     }
   }, [index]);
 
-  return (
+  return !isClicked ? (
     <div className="flex flex-col items-center justify-center min-h-screen text-center px-4">
       {/* Messages */}
       <AnimatePresence mode="wait">
@@ -59,6 +65,7 @@ export default function Home() {
           className="mt-6"
         >
           <Button
+            onClick={handleStartButton}
             variant="contained"
             color="primary"
             size="large"
@@ -69,5 +76,7 @@ export default function Home() {
         </motion.div>
       )}
     </div>
+  ) : (
+    <Plan />
   );
 }
