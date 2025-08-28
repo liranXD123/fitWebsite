@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@mui/material";
-import Plan from "./Plan";
+import Plan from "./Plan.jsx";
 
 export default function Home() {
   const messages = [
