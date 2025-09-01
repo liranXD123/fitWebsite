@@ -10,27 +10,35 @@ import Typography from "@mui/material/Typography";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
-export default function WorkoutPage1({ onDataChange }) {
+export default function WorkoutPage1({ onDataChange, onNextPage }) {
   const [age, setAge] = useState("");
   const [weight, setWeight] = useState("");
   const [weightUnit, setWeightUnit] = useState("kg");
   const [gender, setGender] = useState("");
   const [saved, setSaved] = useState(false);
+
   const [heightUnit, setHeightUnit] = useState("cm");
   const [heightCm, setHeightCm] = useState("");
   const [heightFt, setHeightFt] = useState("");
   const [heightIn, setHeightIn] = useState("");
 
-  const canSave = age.trim() !== "" && weight.trim() !== "" && gender !== "";
+  const canSave =
+    age.trim() !== "" &&
+    weight.trim() !== "" &&
+    gender !== "" &&
+    ((heightUnit === "cm" && heightCm.trim() !== "") ||
+      (heightUnit === "ft" &&
+        heightFt.trim() !== "" &&
+        heightIn.trim() !== ""));
 
   const handleSave = () => {
     if (!canSave) return;
 
-    let height;
+    let formattedHeight;
     if (heightUnit === "cm") {
-      height = `${heightCm} cm`;
+      formattedHeight = `${heightCm} cm`;
     } else {
-      height = `${heightFt} ft ${heightIn} in`;
+      formattedHeight = `${heightFt} ft ${heightIn} in`;
     }
 
     onDataChange({
@@ -38,11 +46,14 @@ export default function WorkoutPage1({ onDataChange }) {
       weight: weight.trim(),
       weightUnit,
       gender,
-      height,
+      height: formattedHeight,
     });
 
     setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    setTimeout(() => setSaved(false), 1000);
+
+    // navigate to WorkoutPage2
+    onNextPage();
   };
 
   const handleGenderChange = (_, newGender) => {
@@ -151,6 +162,8 @@ export default function WorkoutPage1({ onDataChange }) {
           variant="outlined"
           value={age}
           onChange={(e) => setAge(e.target.value)}
+          type="number"
+          inputProps={{ inputMode: "numeric", pattern: "[0-9]*", min: 0 }}
           fullWidth
           InputLabelProps={{ sx: { color: "rgba(255,255,255,0.8)" } }}
           InputProps={{ sx: { color: "white" } }}
@@ -169,6 +182,7 @@ export default function WorkoutPage1({ onDataChange }) {
             value={weight}
             onChange={(e) => setWeight(e.target.value)}
             type="number"
+            inputProps={{ inputMode: "numeric", pattern: "[0-9]*", min: 0 }}
             InputLabelProps={{ sx: { color: "rgba(255,255,255,0.8)" } }}
             InputProps={{ sx: { color: "white" } }}
             sx={{ flex: 1 }}
@@ -184,6 +198,7 @@ export default function WorkoutPage1({ onDataChange }) {
               labelId="weight-unit-label"
               value={weightUnit}
               onChange={(e) => setWeightUnit(e.target.value)}
+              label="Unit"
               sx={{ color: "white" }}
             >
               <MenuItem value="kg">kg</MenuItem>
@@ -198,37 +213,38 @@ export default function WorkoutPage1({ onDataChange }) {
         <Typography sx={{ color: "white", fontWeight: 600, mb: 1 }}>
           Your height
         </Typography>
-        <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
-          <FormControl sx={{ minWidth: 120 }}>
-            <InputLabel
-              id="height-unit-label"
-              sx={{ color: "rgba(255,255,255,0.8)" }}
-            >
-              Unit
-            </InputLabel>
-            <Select
-              labelId="height-unit-label"
-              value={heightUnit}
-              onChange={(e) => setHeightUnit(e.target.value)}
-              sx={{ color: "white" }}
-            >
-              <MenuItem value="cm">cm</MenuItem>
-              <MenuItem value="ft">ft</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-
         {heightUnit === "cm" ? (
-          <TextField
-            label="Height (cm)"
-            variant="outlined"
-            value={heightCm}
-            onChange={(e) => setHeightCm(e.target.value)}
-            type="number"
-            fullWidth
-            InputLabelProps={{ sx: { color: "rgba(255,255,255,0.8)" } }}
-            InputProps={{ sx: { color: "white" } }}
-          />
+          <Box sx={{ display: "flex", justifyContent: "center", gap: 1 }}>
+            <TextField
+              label="Height (cm)"
+              variant="outlined"
+              value={heightCm}
+              onChange={(e) => setHeightCm(e.target.value)}
+              type="number"
+              inputProps={{ inputMode: "numeric", pattern: "[0-9]*", min: 0 }}
+              InputLabelProps={{ sx: { color: "rgba(255,255,255,0.8)" } }}
+              InputProps={{ sx: { color: "white" } }}
+              sx={{ flex: 1 }}
+            />
+            <FormControl sx={{ minWidth: 120 }}>
+              <InputLabel
+                id="height-unit-label"
+                sx={{ color: "rgba(255,255,255,0.8)" }}
+              >
+                Unit
+              </InputLabel>
+              <Select
+                labelId="height-unit-label"
+                value={heightUnit}
+                onChange={(e) => setHeightUnit(e.target.value)}
+                label="Unit"
+                sx={{ color: "white" }}
+              >
+                <MenuItem value="cm">cm</MenuItem>
+                <MenuItem value="ft">ft</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
         ) : (
           <Box sx={{ display: "flex", gap: 1 }}>
             <TextField
@@ -237,8 +253,10 @@ export default function WorkoutPage1({ onDataChange }) {
               value={heightFt}
               onChange={(e) => setHeightFt(e.target.value)}
               type="number"
+              inputProps={{ inputMode: "numeric", pattern: "[0-9]*", min: 0 }}
               InputLabelProps={{ sx: { color: "rgba(255,255,255,0.8)" } }}
               InputProps={{ sx: { color: "white" } }}
+              sx={{ flex: 1 }}
             />
             <TextField
               label="Inches"
@@ -246,14 +264,34 @@ export default function WorkoutPage1({ onDataChange }) {
               value={heightIn}
               onChange={(e) => setHeightIn(e.target.value)}
               type="number"
+              inputProps={{ inputMode: "numeric", pattern: "[0-9]*", min: 0 }}
               InputLabelProps={{ sx: { color: "rgba(255,255,255,0.8)" } }}
               InputProps={{ sx: { color: "white" } }}
+              sx={{ flex: 1 }}
             />
+            <FormControl sx={{ minWidth: 120 }}>
+              <InputLabel
+                id="height-unit-label"
+                sx={{ color: "rgba(255,255,255,0.8)" }}
+              >
+                Unit
+              </InputLabel>
+              <Select
+                labelId="height-unit-label"
+                value={heightUnit}
+                onChange={(e) => setHeightUnit(e.target.value)}
+                label="Unit"
+                sx={{ color: "white" }}
+              >
+                <MenuItem value="cm">cm</MenuItem>
+                <MenuItem value="ft">ft</MenuItem>
+              </Select>
+            </FormControl>
           </Box>
         )}
       </Box>
 
-      {/* Save button */}
+      {/* Save */}
       <Box sx={{ width: "100%", maxWidth: 420 }}>
         <Button
           onClick={handleSave}
@@ -266,9 +304,6 @@ export default function WorkoutPage1({ onDataChange }) {
             fontWeight: 700,
             textTransform: "none",
             background: "linear-gradient(135deg,#00c853 0%, #2196f3 100%)",
-            "&:hover": {
-              background: "linear-gradient(135deg,#00e676 0%, #42a5f5 100%)",
-            },
           }}
         >
           Save
