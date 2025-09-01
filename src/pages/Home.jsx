@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@mui/material";
-import Plan from "./Plan.jsx";
 
-export default function Home() {
+export default function Home({ onStart }) {
   const messages = [
     "Welcome!",
     "It's good to have you on board",
@@ -12,35 +11,22 @@ export default function Home() {
 
   const [index, setIndex] = useState(0);
   const [showButton, setShowButton] = useState(false);
-  const [isClicked, setIsClicked] = useState(false);
-
-  function handleStartButton() {
-    setIsClicked(true);
-  }
 
   useEffect(() => {
     if (index >= messages.length - 1) return;
-
-    const timer = setTimeout(() => {
-      setIndex(index + 1);
-    }, 2000); // show each message 2s before moving to next
-
+    const timer = setTimeout(() => setIndex(index + 1), 2000);
     return () => clearTimeout(timer);
   }, [index]);
 
   useEffect(() => {
-    // show button only after the last message
     if (index === messages.length - 1) {
-      const timer = setTimeout(() => {
-        setShowButton(true);
-      }, 500); // slight delay for smoothness
+      const timer = setTimeout(() => setShowButton(true), 500);
       return () => clearTimeout(timer);
     }
   }, [index]);
 
-  return !isClicked ? (
+  return (
     <div className="flex flex-col items-center justify-center min-h-screen text-center px-4">
-      {/* Messages */}
       <AnimatePresence mode="wait">
         {index < messages.length && (
           <motion.h1
@@ -56,7 +42,6 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* Button appears only after last message */}
       {showButton && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -65,7 +50,7 @@ export default function Home() {
           className="mt-6"
         >
           <Button
-            onClick={handleStartButton}
+            onClick={onStart} // notify App to show Plan
             variant="contained"
             color="primary"
             size="large"
@@ -76,7 +61,5 @@ export default function Home() {
         </motion.div>
       )}
     </div>
-  ) : (
-    <Plan />
   );
 }
