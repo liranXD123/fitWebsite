@@ -10,7 +10,7 @@ function App() {
     height: "",
     weight: "",
     goal: "",
-    experience: "",
+    other: "",
   });
 
   const [showPlan, setShowPlan] = useState(false);

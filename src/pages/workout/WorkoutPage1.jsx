@@ -1,14 +1,23 @@
 import React, { useState } from "react";
-import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import {
+  Box,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
+  TextField,
+  Button,
+  Typography,
+  ToggleButton,
+  ToggleButtonGroup,
+  Paper,
+  Stack,
+} from "@mui/material";
+import { motion } from "framer-motion";
+
+const gradient = "linear-gradient(135deg, #00c853 0%, #2196f3 100%)";
+const bgGradient =
+  "radial-gradient(circle at 70% 20%, #1a2334 0%, #101725 100%)";
 
 export default function WorkoutPage1({ onDataChange, onNextPage }) {
   const [age, setAge] = useState("");
@@ -52,7 +61,6 @@ export default function WorkoutPage1({ onDataChange, onNextPage }) {
     setSaved(true);
     setTimeout(() => setSaved(false), 1000);
 
-    // navigate to WorkoutPage2
     onNextPage();
   };
 
@@ -61,110 +69,131 @@ export default function WorkoutPage1({ onDataChange, onNextPage }) {
   };
 
   return (
-    <>
-      <Box
+    <Box
+      sx={{
+        minHeight: "100vh",
+        width: "100vw",
+        bgcolor: bgGradient,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        boxSizing: "border-box",
+        py: 6,
+        px: 2,
+      }}
+    >
+      <Paper
+        component={motion.div}
+        elevation={7}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, type: "spring" }}
         sx={{
-          minHeight: "calc(10vh - 4px)",
-          paddingTop: "4px", // For extra safety
-          // ...rest of your styles
-        }}
-      >
-        {/* Page content */}
-      </Box>
-
-      <Box
-        sx={{
+          width: "100%",
+          maxWidth: 520,
+          py: { xs: 3, sm: 5 },
+          px: { xs: 3, sm: 5 },
+          borderRadius: 5,
+          bgcolor: "rgba(28,34,49,0.97)",
+          boxShadow: "0 8px 30px rgba(0, 200, 83, 0.25)",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "center",
-          minHeight: "85vh",
-          gap: 3,
-          color: "white",
-          textAlign: "center",
-          width: "100%",
-          px: 2,
+          gap: 4,
         }}
       >
-        <Typography
-          variant="h4"
-          sx={{
-            fontWeight: 700,
-            background: "linear-gradient(90deg, #00c853, #2196f3)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-          }}
-        >
-          🏋️ Workout Plan Builder
-        </Typography>
-
-        <Typography variant="h6" sx={{ color: "rgba(255,255,255,0.8)" }}>
-          Answer these few questions to build your optimal plan!
-        </Typography>
+        <Stack width="100%" alignItems="center" spacing={1}>
+          <Typography
+            variant="h4"
+            fontWeight={700}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              letterSpacing: 1.2,
+            }}
+          >
+            <Box component="span" sx={{ mr: 1, fontSize: "1.6em" }}>
+              🏋️
+            </Box>
+            <Box
+              component="span"
+              sx={{
+                background: gradient,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              Workout Plan Builder
+            </Box>
+          </Typography>
+          <Typography
+            variant="h6"
+            sx={{
+              color: "rgba(255,255,255,0.82)",
+              fontWeight: 400,
+              letterSpacing: 0.3,
+              textAlign: "center",
+            }}
+          >
+            Answer these few questions to build your optimal plan!
+          </Typography>
+        </Stack>
 
         {/* Gender Selection */}
-        <Typography sx={{ color: "white", fontWeight: 600 }}>
-          First, how do you identify yourself?
-        </Typography>
-        <ToggleButtonGroup
-          value={gender}
-          exclusive
-          onChange={handleGenderChange}
-          sx={{
-            backgroundColor: "rgba(255,255,255,0.1)",
-            borderRadius: "12px",
-            overflow: "hidden",
-          }}
-        >
-          <ToggleButton
-            value="male"
+        <Box width="100%">
+          <Typography sx={{ color: "white", fontWeight: 600, mb: 1 }}>
+            First, how do you identify yourself?
+          </Typography>
+          <ToggleButtonGroup
+            value={gender}
+            exclusive
+            onChange={handleGenderChange}
             sx={{
-              color: "white",
-              "&.Mui-selected": {
-                background: "linear-gradient(135deg,#00c853,#2196f3)",
-                color: "white",
-              },
-              "&:hover": {
-                backgroundColor: "rgba(0,200,83,0.2)",
-              },
+              backgroundColor: "rgba(255,255,255,0.1)",
+              borderRadius: 3,
+              overflow: "hidden",
+              boxShadow: "0 1.5px 9px 0 rgba(33,150,243,0.13)",
+              p: 0.5,
+              gap: 1,
+              width: "100%",
+              justifyContent: "center",
             }}
           >
-            Male
-          </ToggleButton>
-          <ToggleButton
-            value="female"
-            sx={{
-              color: "white",
-              "&.Mui-selected": {
-                background: "linear-gradient(135deg,#00c853,#2196f3)",
-                color: "white",
-              },
-              "&:hover": {
-                backgroundColor: "rgba(33,150,243,0.2)",
-              },
-            }}
-          >
-            Female
-          </ToggleButton>
-          <ToggleButton
-            value="other"
-            sx={{
-              color: "white",
-              "&.Mui-selected": {
-                background: "linear-gradient(135deg,#00c853,#2196f3)",
-                color: "white",
-              },
-              "&:hover": {
-                backgroundColor: "rgba(255,255,255,0.2)",
-              },
-            }}
-          >
-            Other
-          </ToggleButton>
-        </ToggleButtonGroup>
+            {[
+              { value: "male", label: "Male", bg: "rgba(0,200,83,0.2)" },
+              { value: "female", label: "Female", bg: "rgba(33,150,243,0.2)" },
+              { value: "other", label: "Other", bg: "rgba(255,255,255,0.2)" },
+            ].map(({ value, label, bg }) => (
+              <ToggleButton
+                key={value}
+                value={value}
+                sx={{
+                  color: "white",
+                  fontWeight: 600,
+                  px: 4,
+                  fontSize: 15,
+                  borderRadius: 3,
+                  transition: "all 0.15s",
+                  "&.Mui-selected": {
+                    background: gradient,
+                    color: "#fff",
+                    boxShadow: "0 6px 20px 0 rgba(0,200,83,0.18)",
+                  },
+                  "&:hover": {
+                    backgroundColor: bg,
+                    color: "#fff",
+                  },
+                }}
+              >
+                {label}
+              </ToggleButton>
+            ))}
+          </ToggleButtonGroup>
+        </Box>
 
         {/* Age */}
-        <Box sx={{ width: "100%", maxWidth: 420 }}>
+        <Box width="100%" maxWidth={420}>
           <Typography sx={{ color: "white", fontWeight: 600, mb: 1 }}>
             And now, what is your age?
           </Typography>
@@ -174,15 +203,32 @@ export default function WorkoutPage1({ onDataChange, onNextPage }) {
             value={age}
             onChange={(e) => setAge(e.target.value)}
             type="number"
-            inputProps={{ inputMode: "numeric", pattern: "[0-9]*", min: 0 }}
+            inputProps={{
+              inputMode: "numeric",
+              pattern: "[0-9]*",
+              min: 0,
+              style: { color: "#fff" },
+            }}
             fullWidth
             InputLabelProps={{ sx: { color: "rgba(255,255,255,0.8)" } }}
-            InputProps={{ sx: { color: "white" } }}
+            InputProps={{
+              sx: {
+                color: "white",
+                bgcolor: "rgba(255,255,255,0.04)",
+                borderRadius: 2,
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#2196f3",
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#00c853",
+                },
+              },
+            }}
           />
         </Box>
 
         {/* Weight */}
-        <Box sx={{ width: "100%", maxWidth: 420 }}>
+        <Box width="100%" maxWidth={420}>
           <Typography sx={{ color: "white", fontWeight: 600, mb: 1 }}>
             Your weight
           </Typography>
@@ -193,10 +239,25 @@ export default function WorkoutPage1({ onDataChange, onNextPage }) {
               value={weight}
               onChange={(e) => setWeight(e.target.value)}
               type="number"
-              inputProps={{ inputMode: "numeric", pattern: "[0-9]*", min: 0 }}
+              inputProps={{
+                inputMode: "numeric",
+                pattern: "[0-9]*",
+                min: 0,
+                style: { color: "#fff" },
+              }}
+              sx={{
+                flex: 1,
+                bgcolor: "rgba(255,255,255,0.04)",
+                borderRadius: 2,
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#2196f3",
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#00c853",
+                },
+              }}
               InputLabelProps={{ sx: { color: "rgba(255,255,255,0.8)" } }}
               InputProps={{ sx: { color: "white" } }}
-              sx={{ flex: 1 }}
             />
             <FormControl sx={{ minWidth: 120 }}>
               <InputLabel
@@ -210,7 +271,15 @@ export default function WorkoutPage1({ onDataChange, onNextPage }) {
                 value={weightUnit}
                 onChange={(e) => setWeightUnit(e.target.value)}
                 label="Unit"
-                sx={{ color: "white" }}
+                sx={{
+                  color: "white",
+                  ".MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#2196f3",
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#00c853",
+                  },
+                }}
               >
                 <MenuItem value="kg">kg</MenuItem>
                 <MenuItem value="lbs">lbs</MenuItem>
@@ -220,7 +289,7 @@ export default function WorkoutPage1({ onDataChange, onNextPage }) {
         </Box>
 
         {/* Height */}
-        <Box sx={{ width: "100%", maxWidth: 420 }}>
+        <Box width="100%" maxWidth={420}>
           <Typography sx={{ color: "white", fontWeight: 600, mb: 1 }}>
             Your height
           </Typography>
@@ -232,10 +301,25 @@ export default function WorkoutPage1({ onDataChange, onNextPage }) {
                 value={heightCm}
                 onChange={(e) => setHeightCm(e.target.value)}
                 type="number"
-                inputProps={{ inputMode: "numeric", pattern: "[0-9]*", min: 0 }}
+                inputProps={{
+                  inputMode: "numeric",
+                  pattern: "[0-9]*",
+                  min: 0,
+                  style: { color: "#fff" },
+                }}
+                sx={{
+                  flex: 1,
+                  bgcolor: "rgba(255,255,255,0.04)",
+                  borderRadius: 2,
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#2196f3",
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#00c853",
+                  },
+                }}
                 InputLabelProps={{ sx: { color: "rgba(255,255,255,0.8)" } }}
                 InputProps={{ sx: { color: "white" } }}
-                sx={{ flex: 1 }}
               />
               <FormControl sx={{ minWidth: 120 }}>
                 <InputLabel
@@ -249,7 +333,15 @@ export default function WorkoutPage1({ onDataChange, onNextPage }) {
                   value={heightUnit}
                   onChange={(e) => setHeightUnit(e.target.value)}
                   label="Unit"
-                  sx={{ color: "white" }}
+                  sx={{
+                    color: "white",
+                    ".MuiOutlinedInput-notchedOutline": {
+                      borderColor: "#2196f3",
+                    },
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "#00c853",
+                    },
+                  }}
                 >
                   <MenuItem value="cm">cm</MenuItem>
                   <MenuItem value="ft">ft</MenuItem>
@@ -264,10 +356,25 @@ export default function WorkoutPage1({ onDataChange, onNextPage }) {
                 value={heightFt}
                 onChange={(e) => setHeightFt(e.target.value)}
                 type="number"
-                inputProps={{ inputMode: "numeric", pattern: "[0-9]*", min: 0 }}
+                inputProps={{
+                  inputMode: "numeric",
+                  pattern: "[0-9]*",
+                  min: 0,
+                  style: { color: "#fff" },
+                }}
+                sx={{
+                  flex: 1,
+                  bgcolor: "rgba(255,255,255,0.04)",
+                  borderRadius: 2,
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#2196f3",
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#00c853",
+                  },
+                }}
                 InputLabelProps={{ sx: { color: "rgba(255,255,255,0.8)" } }}
                 InputProps={{ sx: { color: "white" } }}
-                sx={{ flex: 1 }}
               />
               <TextField
                 label="Inches"
@@ -275,10 +382,25 @@ export default function WorkoutPage1({ onDataChange, onNextPage }) {
                 value={heightIn}
                 onChange={(e) => setHeightIn(e.target.value)}
                 type="number"
-                inputProps={{ inputMode: "numeric", pattern: "[0-9]*", min: 0 }}
+                inputProps={{
+                  inputMode: "numeric",
+                  pattern: "[0-9]*",
+                  min: 0,
+                  style: { color: "#fff" },
+                }}
+                sx={{
+                  flex: 1,
+                  bgcolor: "rgba(255,255,255,0.04)",
+                  borderRadius: 2,
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#2196f3",
+                  },
+                  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#00c853",
+                  },
+                }}
                 InputLabelProps={{ sx: { color: "rgba(255,255,255,0.8)" } }}
                 InputProps={{ sx: { color: "white" } }}
-                sx={{ flex: 1 }}
               />
               <FormControl sx={{ minWidth: 120 }}>
                 <InputLabel
@@ -292,7 +414,15 @@ export default function WorkoutPage1({ onDataChange, onNextPage }) {
                   value={heightUnit}
                   onChange={(e) => setHeightUnit(e.target.value)}
                   label="Unit"
-                  sx={{ color: "white" }}
+                  sx={{
+                    color: "white",
+                    ".MuiOutlinedInput-notchedOutline": {
+                      borderColor: "#2196f3",
+                    },
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      borderColor: "#00c853",
+                    },
+                  }}
                 >
                   <MenuItem value="cm">cm</MenuItem>
                   <MenuItem value="ft">ft</MenuItem>
@@ -303,29 +433,45 @@ export default function WorkoutPage1({ onDataChange, onNextPage }) {
         </Box>
 
         {/* Save */}
-        <Box sx={{ width: "100%", maxWidth: 420 }}>
+        <Box width="100%" maxWidth={420}>
           <Button
+            component={motion.button}
+            whileHover={{ scale: 1.03, boxShadow: "0 0 0 3px #00c853" }}
+            whileTap={{ scale: 0.97 }}
             onClick={handleSave}
             disabled={!canSave}
             variant="contained"
             fullWidth
             sx={{
               borderRadius: "12px",
-              py: 1.2,
+              py: 1.3,
               fontWeight: 700,
               textTransform: "none",
-              background: "linear-gradient(135deg,#00c853 0%, #2196f3 100%)",
+              background: gradient,
+              boxShadow: "0 6px 18px rgba(33,150,243,0.18)",
+              fontSize: 17,
             }}
           >
             Save
           </Button>
           {saved && (
-            <Typography sx={{ color: "#c8ffc8", mt: 1, textAlign: "center" }}>
+            <Typography
+              sx={{
+                color: "#afffaf",
+                mt: 1,
+                textAlign: "center",
+                fontWeight: "600",
+              }}
+              component={motion.div}
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
               ✅ Saved!
             </Typography>
           )}
         </Box>
-      </Box>
-    </>
+      </Paper>
+    </Box>
   );
 }
