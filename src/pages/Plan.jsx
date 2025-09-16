@@ -3,12 +3,11 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import WorkoutPage1 from "./workout/WorkoutPage1.jsx";
 import WorkoutPage2 from "./workout/WorkoutPage2.jsx";
-import WorkoutView from "./workout/WorkoutView.jsx"; // Make sure path is correct
+import WorkoutView from "./workout/WorkoutView.jsx";
 
 export default function Plan({ userData, setUserData }) {
   // track which screen we're on
-  const [page, setPage] = useState("selection");
-  // "selection" | "workout1" | "workout2" | "workoutView"
+  const [page, setPage] = useState("selection"); // "selection" | "workout1" | "workout2" | "workoutView"
 
   const handleDataChange = (patch) => {
     // merge new data into the global userData state
@@ -17,9 +16,11 @@ export default function Plan({ userData, setUserData }) {
 
   if (page === "selection") {
     return (
-      <Stack direction="row" spacing={2} justifyContent="center" sx={{ mt: 6 }}>
-        <Button variant="contained">Build my nutrition plan!</Button>
-        <Button onClick={() => setPage("workout1")} variant="contained">
+      <Stack alignItems="center" spacing={3} pt={5}>
+        <Button variant="outlined" disabled>
+          Build my nutrition plan!
+        </Button>
+        <Button variant="contained" onClick={() => setPage("workout1")}>
           Build my workout plan!
         </Button>
       </Stack>
