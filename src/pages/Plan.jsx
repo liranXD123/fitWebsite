@@ -5,19 +5,22 @@ import WorkoutPage1 from "./workout/WorkoutPage1.jsx";
 import WorkoutPage2 from "./workout/WorkoutPage2.jsx";
 import WorkoutView from "./workout/WorkoutView.jsx";
 
+import NutritionPage1 from "./nutrition/NutritionPage1.jsx";
+import NutritionPage2 from "./nutrition/NutritionPage2.jsx";
+import NutritionPage3 from "./nutrition/NutritionPage3.jsx";
+import NutritionView from "./nutrition/NutritionView.jsx";
+
 export default function Plan({ userData, setUserData }) {
-  // track which screen we're on
-  const [page, setPage] = useState("selection"); // "selection" | "workout1" | "workout2" | "workoutView"
+  const [page, setPage] = useState("selection");
 
   const handleDataChange = (patch) => {
-    // merge new data into the global userData state
     setUserData((prev) => ({ ...prev, ...patch }));
   };
 
   if (page === "selection") {
     return (
       <Stack alignItems="center" spacing={3} pt={5}>
-        <Button variant="outlined" disabled>
+        <Button variant="contained" onClick={() => setPage("nutrition1")}>
           Build my nutrition plan!
         </Button>
         <Button variant="contained" onClick={() => setPage("workout1")}>
@@ -27,6 +30,42 @@ export default function Plan({ userData, setUserData }) {
     );
   }
 
+  // === Nutrition Flow ===
+  if (page === "nutrition1") {
+    return (
+      <NutritionPage1
+        userData={userData}
+        onDataChange={handleDataChange}
+        onNextPage={() => setPage("nutrition2")}
+      />
+    );
+  }
+
+  if (page === "nutrition2") {
+    return (
+      <NutritionPage2
+        userData={userData}
+        onDataChange={handleDataChange}
+        onNextPage={() => setPage("nutrition3")}
+      />
+    );
+  }
+
+  if (page === "nutrition3") {
+    return (
+      <NutritionPage3
+        userData={userData}
+        onDataChange={handleDataChange}
+        onNextPage={() => setPage("nutritionView")}
+      />
+    );
+  }
+
+  if (page === "nutritionView") {
+    return <NutritionView userData={userData} />;
+  }
+
+  // === Workout Flow ===
   if (page === "workout1") {
     return (
       <WorkoutPage1

@@ -5,13 +5,13 @@ import { motion } from "framer-motion";
 const AIML_API_URL = "https://api.aimlapi.com/v1/chat/completions";
 const AIML_API_KEY = "4a94ad7ec49e4c11a92aa823f4996d2b"; // replace with your real key
 
-// Prompt builder for workout
-function buildTrainerPrompt(userData) {
+// Prompt builder for nutrition
+function buildNutritionPrompt(userData) {
   return `
-You are a world-class certified personal fitness trainer.
-Given the following client's profile, create a detailed, motivational, safe, and science-based workout program.
-Structure with clear sections: warm-up, exercises (with sets/reps/rest), weekly schedule, and recovery.
-Keep it professional but motivational.
+You are a world-class certified nutritionist and diet planner.
+Given the following client's profile, create a detailed, professional, and practical nutrition program.
+Include daily meal breakdowns (breakfast, lunch, dinner, snacks), portion sizes, macronutrient balance, hydration tips.
+Keep it realistic, affordable, and motivating. Respect any dietary restrictions.
 
 Client Profile:
 - Age: ${userData.age}
@@ -19,14 +19,14 @@ Client Profile:
 - Height: ${userData.height}
 - Weight: ${userData.weight} ${userData.weightUnit || ""}
 - Goal: ${userData.goal}
-- Fitness level: ${userData.level}
-- Equipment: ${userData.equipment?.join(", ") || "None"}
-- Workout days/week: ${userData.workoutsPerWeek}
-- Notes: ${userData.other || "None"}
+- Activity level: ${userData.activityLevel}
+- Meals per day: ${userData.meals}
+- Nutrition type: ${userData.nutritionType}
+- Budget: ${userData.budget}
+- Allergies/Notes: ${userData.notes || "None"}
 `;
 }
 
-// Shared API call
 async function fetchPlan(prompt) {
   try {
     const res = await fetch(AIML_API_URL, {
@@ -54,20 +54,20 @@ async function fetchPlan(prompt) {
     return data.choices[0].message.content || "No response.";
   } catch (err) {
     console.error("Fetch error:", err);
-    return "❌ Sorry, something went wrong while generating your plan.";
+    return "❌ Sorry, something went wrong while generating your nutrition plan.";
   }
 }
 
-export default function WorkoutView({ userData }) {
-  const [program, setProgram] = useState("");
+export default function NutritionView({ userData }) {
+  const [plan, setPlan] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!userData) return;
-    const prompt = buildTrainerPrompt(userData);
+    const prompt = buildNutritionPrompt(userData);
 
     fetchPlan(prompt).then((content) => {
-      setProgram(content);
+      setPlan(content);
       setLoading(false);
     });
   }, [userData]);
@@ -109,7 +109,7 @@ export default function WorkoutView({ userData }) {
               WebkitTextFillColor: "transparent",
             }}
           >
-            🏋️ Your Personalized Workout Program
+            🥗 Your Personalized Nutrition Plan
           </Typography>
 
           {loading ? (
@@ -123,7 +123,7 @@ export default function WorkoutView({ userData }) {
             >
               <CircularProgress color="success" size={56} thickness={5} />
               <Typography variant="body1" sx={{ color: "#aaa" }}>
-                Building your workout plan...
+                Building your nutrition plan...
               </Typography>
             </Box>
           ) : (
@@ -134,7 +134,7 @@ export default function WorkoutView({ userData }) {
                 lineHeight: 1.6,
               }}
             >
-              {program}
+              {plan}
             </Typography>
           )}
         </Stack>

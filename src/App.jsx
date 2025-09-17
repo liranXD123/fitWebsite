@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import Navbar from "./components/Navbar.jsx";
 import Home from "./pages/Home";
 import Plan from "./pages/Plan.jsx";
@@ -12,6 +11,7 @@ function App() {
     weight: "",
     goal: "",
     other: "",
+    // fields for nutrition will be merged in dynamically
   });
 
   const [showPlan, setShowPlan] = useState(false);
